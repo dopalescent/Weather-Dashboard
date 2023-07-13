@@ -1,35 +1,61 @@
 var weatherButton = $('#get-weather');
 var apiKey = 'c33974f6b55837669ae9af7f2fe6758a';
+var searchedCity = 'London'
+var cityLat
+var cityLon
 
-function callWeather () {
-  console.log('Weather Called')
-  var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=London&appid=' + apiKey;
-  // var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=London&appid=c33974f6b55837669ae9af7f2fe6758a';
-  requestUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=London&appid=' + apiKey;
 
-  fetch(requestUrl)
+function callGeo() {
+  console.log('GeoFind Called')
+  var geoUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + searchedCity + '&appid=' + apiKey;
+
+  fetch(geoUrl)
     .then(function (response) {
       console.log(response);
       return response.json();
     })
     .then(function (response) {
       console.log(response);
-      console.log(response[0]);
       console.log(response[0].lat);
       console.log(response[0].lon);
-      var collection = response;
-      console.log(collection);
-      console.log(collection[0]);
-      console.log(collection[0].lat);
-      console.log(collection[0].lon);      
+      cityLat = response[0].lat;
+      cityLon = response[0].lon;
+      callWeather();
+      callForecast();
     })
-    .then(function (data) {
-      console.log(data);
+
+}
+
+function callWeather() {
+  console.log('Weather Called');
+  console.log(cityLat);
+  console.log(cityLon);
+  var weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + cityLat + '&lon=' + cityLon + '&appid=' + apiKey;
+
+  fetch(weatherUrl)
+    .then(function (response) {
+      console.log('Weather Fetched');
+      return response.json();
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+}
+
+function callForecast() {
+  console.log('Forecast Called')
+  var forecastUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + cityLat + '&lon=' + cityLon + '&appid=' + apiKey;
+
+  fetch(forecastUrl)
+    .then(function (response) {
+      console.log('Forecast Fetched');
+      return response.json();
+    })
+    .then(function (response) {
+      console.log(response);
     })
 }
 
 
-
-
-weatherButton.on('click', callWeather)
+weatherButton.on('click', callGeo);
 
