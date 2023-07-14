@@ -1,12 +1,12 @@
 var weatherButton = $('#get-weather');
 var apiKey = 'c33974f6b55837669ae9af7f2fe6758a';
-var searchedCity = 'London'
-var cityLat
-var cityLon
+var cityLat;
+var cityLon;
 
 
 function callGeo() {
   console.log('GeoFind Called')
+  var searchedCity = $('#city-search').val();
   var geoUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + searchedCity + '&appid=' + apiKey;
 
   fetch(geoUrl)
