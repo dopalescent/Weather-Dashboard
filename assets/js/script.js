@@ -3,6 +3,9 @@ var apiKey = 'c33974f6b55837669ae9af7f2fe6758a';
 var cityLat;
 var cityLon;
 
+console.log(dayjs().format('(MM/DD/YYYY)'))
+console.log(dayjs().add(1,'day').format('(MM/DD/YYYY)'))
+
 
 function callGeo() {
   console.log('GeoFind Called')
@@ -71,6 +74,24 @@ function callForecast() {
     })
     .then(function (response) {
       console.log(response);
+
+      for (var i = 0; i < 5; i++) {
+        var forecastDate = $('#forecast-date-' + i);
+        forecastDate.text(dayjs().add(i + 1,'day').format('(MM/DD/YYYY)'));
+
+        var forecastIcon = response.list[i * 8].weather[0].icon;
+        var forecastImg = $('#forecast-img-' + i);
+        forecastImg.attr('src','https://openweathermap.org/img/wn/' + forecastIcon + '@2x.png');
+
+        var forecastTemp = $('#forecast-temp-' + i);
+        forecastTemp.text('Temp: ' + response.list[i * 8].main.temp + '°F');
+
+        var forecastWind = $('#forecast-wind-' + i);
+        forecastWind.text('Wind: ' + response.list[i * 8].wind.speed + ' MPH');
+  
+        var forecastHumidity = $('#forecast-humidity-' + i);
+        forecastHumidity.text('Humidity: ' + response.list[i * 8].main.humidity + '%');
+      }
     })
 }
 
