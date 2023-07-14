@@ -1,7 +1,7 @@
 # <Challenge 6: Weather Dashboard>
 
 
-At time of publication, the project can be found deployed at https://dopalescent.github.io/Work-Day-Scheduler/
+At time of publication, the project can be found deployed at https://dopalescent.github.io/Weather-Dashboard/
 
 
 - The following screenshot previews the deployed project:
