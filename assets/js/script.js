@@ -1,17 +1,17 @@
 var weatherButton = $('#get-weather');
+var searchHistory = $('#search-history');
 var apiKey = 'c33974f6b55837669ae9af7f2fe6758a';
 var cityLat;
 var cityLon;
-
-console.log(dayjs().format('(MM/DD/YYYY)'))
-console.log(dayjs().add(1,'day').format('(MM/DD/YYYY)'))
+var searches = [];
 
 
 function callGeo() {
-  console.log('GeoFind Called')
+  console.log('GeoFind Called');
   var searchedCity = $('#city-search').val();
-  var geoUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + searchedCity + '&limit=1&appid=' + apiKey;
+  printSearches();
 
+  var geoUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + searchedCity + '&limit=1&appid=' + apiKey;
   fetch(geoUrl)
     .then(function (response) {
       console.log(response);
@@ -49,8 +49,8 @@ function callWeather() {
       weatherTitle.text(cityTitle + '  ' + thisDay);
 
       var weatherIcon = response.weather[0].icon;
-      var weatherImg = $('#weather-img')
-      weatherImg.attr('src','https://openweathermap.org/img/wn/' + weatherIcon + '@2x.png')
+      var weatherImg = $('#weather-img');
+      weatherImg.attr('src','https://openweathermap.org/img/wn/' + weatherIcon + '@2x.png');
 
       var weatherTemp = $('#weather-temp');
       weatherTemp.text('Temp: ' + response.main.temp + '°F');
@@ -64,7 +64,7 @@ function callWeather() {
 }
 
 function callForecast() {
-  console.log('Forecast Called')
+  console.log('Forecast Called');
   var forecastUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + cityLat + '&lon=' + cityLon + '&appid=' + apiKey + '&units=imperial';
 
   fetch(forecastUrl)
@@ -95,6 +95,15 @@ function callForecast() {
     })
 }
 
+function printSearches() {
+  console.log("Print Called")
+  console.log(searchHistory)
+  console.log(searchHistory.children)
+  
+  // while (searchHistory.children.length > 0) {
+  //   searchHistory.removeChild(searchHistory.children[0]);
+  // }
+}
 
 weatherButton.on('click', callGeo);
 
