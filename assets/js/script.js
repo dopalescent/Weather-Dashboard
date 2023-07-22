@@ -3,7 +3,8 @@ var searchHistory = $('#search-history');
 var apiKey = 'c33974f6b55837669ae9af7f2fe6758a';
 var cityLat;
 var cityLon;
-var searches = [];
+var searches = 'abcd'.split('');
+// [];
 
 
 function callGeo() {
@@ -97,13 +98,28 @@ function callForecast() {
 
 function printSearches() {
   console.log("Print Called")
-  console.log(searchHistory)
-  console.log(searchHistory.children)
+  console.log(searches);
+  searches.unshift('e');
+  console.log(searches);
+
+  for(var i = 0; i < searches.length; i++) {
+    // var liNum = '#li-' + i;
+    // console.log(liNum);
+    // $(liNum).text("Test " + searches[i]);
+    var searchCard = `<li id="li-${i}" class="my-1 list-group-item list-group-item-action">Test ${searches[i]}</li>`;
+    searchHistory.append(searchCard);
+  }
+
+  // console.log(searchHistory)
+  // console.log(searchHistory[0].children)
+  // console.log(searchHistory[0].children.length)
+  // console.log(searchHistory[0].children[0])
   
-  // while (searchHistory.children.length > 0) {
-  //   searchHistory.removeChild(searchHistory.children[0]);
+  // while (searchHistory[0].children.length > 0) {
+  //   searchHistory.removeChild(searchHistory[0].children[0]);
   // }
 }
 
 weatherButton.on('click', callGeo);
 
+$('#test').on('click', printSearches)
