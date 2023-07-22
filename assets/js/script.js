@@ -11,7 +11,7 @@ function callGeo() {
   var searchedCity = $('#city-search').val();
   printSearches();
 
-  var geoUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + searchedCity + '&limit=1&appid=' + apiKey;
+  var geoUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + searchedCity + '&limit=1&appid=' + apiKey;
   fetch(geoUrl)
     .then(function (response) {
       console.log(response);
