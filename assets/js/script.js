@@ -98,6 +98,15 @@ function callForecast() {
 
 function printSearches() {
   console.log("Print Called")
+  console.log(searchHistory)
+  console.log(searchHistory[0].children)
+  console.log(searchHistory[0].children.length)
+  console.log(searchHistory[0].children[0])
+  
+  if (searchHistory.children.length > 0) {
+    searchHistory.empty();
+  }
+
   console.log(searches);
   searches.unshift('e');
   console.log(searches);
@@ -106,18 +115,13 @@ function printSearches() {
     // var liNum = '#li-' + i;
     // console.log(liNum);
     // $(liNum).text("Test " + searches[i]);
-    var searchCard = `<li id="li-${i}" class="my-1 list-group-item list-group-item-action">Test ${searches[i]}</li>`;
+    var searchCard = $(`<li id="li-${i}" class="my-1 list-group-item list-group-item-action">Test ${searches[i]}</li>`);
     searchHistory.append(searchCard);
   }
 
-  // console.log(searchHistory)
-  // console.log(searchHistory[0].children)
-  // console.log(searchHistory[0].children.length)
-  // console.log(searchHistory[0].children[0])
-  
-  // while (searchHistory[0].children.length > 0) {
-  //   searchHistory.removeChild(searchHistory[0].children[0]);
-  // }
+  console.log(searchHistory[0].children)
+  console.log(searchHistory[0].children.length)
+  console.log(searchHistory[0].children[0])
 }
 
 weatherButton.on('click', callGeo);
