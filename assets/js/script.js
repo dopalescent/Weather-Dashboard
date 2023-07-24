@@ -1,15 +1,18 @@
 var weatherButton = $('#get-weather');
 var searchHistory = $('#search-history');
 var apiKey = 'c33974f6b55837669ae9af7f2fe6758a';
-var searchedCity;
+// var searchedCity;
+var searchedCity = $('#city-search').val()
 var cityLat;
 var cityLon;
 var searches = [];
 
 
-function callGeo() {
+function callGeo(searchedCity) {
   console.log('GeoFind Called');
-  searchedCity = $('#city-search').val();
+  if ($('#city-search').val()) {
+    console.log('Searched from searchbar');
+  }
   printSearches();
 
   var geoUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + searchedCity + '&limit=1&appid=' + apiKey;
@@ -26,6 +29,7 @@ function callGeo() {
       cityLon = response[0].lon;
       callWeather();
       callForecast();
+      $('#city-search').val('');
     })
 
 }
@@ -105,11 +109,14 @@ function printSearches() {
   }
 
   for(var k = 0; k < searches.length; k++) {
-    var searchCard = $(`<li id="li-${k}" class="my-1 list-group-item list-group-item-action">Test ${searches[k]}</li>`);
+    var searchCard = $(`<li id="li-${k}" class="my-1 list-group-item list-group-item-action">${searches[k]}</li>`);
+    searchCard.on('click', function(event) {
+      console.log(event.target);
+      console.log($(event.target).text());
+      searchedCity = $(event.target).text();
+      callGeo(searchedCity);
+    })
     searchHistory.append(searchCard);
-    if(searchCard.text = "Test b") {
-      console.log("text catch found")
-    }
   }
 
 }
@@ -137,6 +144,6 @@ function manageStorage() {
   localStorage.setItem('searches', JSON.stringify(searches));
 }
 
-weatherButton.on('click', callGeo);
+printSearches();
 
-$('#test').on('click', printSearches)
+weatherButton.on('click', callGeo);
