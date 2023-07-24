@@ -1,5 +1,6 @@
 var weatherButton = $('#get-weather');
 var searchHistory = $('#search-history');
+var searchedCity = $('#city-search').val();
 var apiKey = 'c33974f6b55837669ae9af7f2fe6758a';
 var cityLat;
 var cityLon;
@@ -9,7 +10,6 @@ var searches = 'abcd'.split('');
 
 function callGeo() {
   console.log('GeoFind Called');
-  var searchedCity = $('#city-search').val();
   printSearches();
 
   var geoUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + searchedCity + '&limit=1&appid=' + apiKey;
@@ -98,18 +98,19 @@ function callForecast() {
 
 function printSearches() {
   console.log("Print Called")
-  console.log(searchHistory)
-  console.log(searchHistory[0].children)
-  console.log(searchHistory[0].children.length)
-  console.log(searchHistory[0].children[0])
-  
+  for(var j = (searches.length - 1); j >= 0; j--) {
+    if (searchedCity === searches[j]){
+      searches.splice(j, 1);
+    }
+  }
+  searches.unshift(searchedCity);
+  if (searches.length > 10) {
+    searches.pop();
+  }
+ 
   if (searchHistory.children.length > 0) {
     searchHistory.empty();
   }
-
-  console.log(searches);
-  searches.unshift('e');
-  console.log(searches);
 
   for(var i = 0; i < searches.length; i++) {
     // var liNum = '#li-' + i;
@@ -117,6 +118,9 @@ function printSearches() {
     // $(liNum).text("Test " + searches[i]);
     var searchCard = $(`<li id="li-${i}" class="my-1 list-group-item list-group-item-action">Test ${searches[i]}</li>`);
     searchHistory.append(searchCard);
+    if(searchCard.text = "Test b") {
+      console.log("text catch found")
+    }
   }
 
   console.log(searchHistory[0].children)
