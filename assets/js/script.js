@@ -1,52 +1,51 @@
 var weatherButton = $('#get-weather');
 var searchHistory = $('#search-history');
 var apiKey = 'c33974f6b55837669ae9af7f2fe6758a';
-// var searchedCity;
-var searchedCity = $('#city-search').val()
+var enteredCity;
+var searchedCity;
 var cityLat;
 var cityLon;
 var searches = [];
 
 
 function callGeo(searchedCity) {
-  console.log('GeoFind Called');
-  if ($('#city-search').val()) {
-    console.log('Searched from searchbar');
+  enteredCity = $('#city-search').val();
+
+  if (enteredCity) {
+    searchedCity = enteredCity;
   }
+
   printSearches();
 
   var geoUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + searchedCity + '&limit=1&appid=' + apiKey;
+
   fetch(geoUrl)
     .then(function (response) {
-      console.log(response);
       return response.json();
     })
     .then(function (response) {
-      console.log(response);
-      console.log(response[0].lat);
-      console.log(response[0].lon);
+
       cityLat = response[0].lat;
       cityLon = response[0].lon;
+
       callWeather();
       callForecast();
+
       $('#city-search').val('');
     })
 
 }
 
 function callWeather() {
-  console.log('Weather Called');
-  console.log(cityLat);
-  console.log(cityLon);
+
   var weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + cityLat + '&lon=' + cityLon + '&appid=' + apiKey + '&units=imperial';
 
   fetch(weatherUrl)
     .then(function (response) {
-      console.log('Weather Fetched');
+
       return response.json();
     })
     .then(function (response) {
-      console.log(response);
 
       var weatherTitle = $('#weather-title');
       var cityTitle = response.name;
@@ -69,16 +68,15 @@ function callWeather() {
 }
 
 function callForecast() {
-  console.log('Forecast Called');
+
   var forecastUrl = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + cityLat + '&lon=' + cityLon + '&appid=' + apiKey + '&units=imperial';
 
   fetch(forecastUrl)
     .then(function (response) {
-      console.log('Forecast Fetched');
+
       return response.json();
     })
     .then(function (response) {
-      console.log(response);
 
       for (var i = 0; i < 5; i++) {
         var forecastDate = $('#forecast-date-' + i);
@@ -101,7 +99,7 @@ function callForecast() {
 }
 
 function printSearches() {
-  console.log("Print Called")
+
   manageStorage();
  
   if (searchHistory.children.length > 0) {
@@ -110,38 +108,51 @@ function printSearches() {
 
   for(var k = 0; k < searches.length; k++) {
     var searchCard = $(`<li id="li-${k}" class="my-1 list-group-item list-group-item-action">${searches[k]}</li>`);
+
+    if (searchedCity === searches[k]) {
+      searchCard.addClass('active');
+    }
+
     searchCard.on('click', function(event) {
-      console.log(event.target);
-      console.log($(event.target).text());
       searchedCity = $(event.target).text();
       callGeo(searchedCity);
     })
+
     searchHistory.append(searchCard);
   }
 
 }
 
 function manageStorage() {
-  console.log('Storage Manager Called');
+
+  enteredCity = $('#city-search').val();
+
   var storedSearches = JSON.parse(localStorage.getItem('searches'));
+
   if (storedSearches !== null) {
+
     searches = storedSearches;
-  }
-
-  for(var j = (searches.length - 1); j >= 0; j--) {
-    if (searchedCity == searches[j]){
-      searches.splice(j, 1);
-      console.log('removed duplicate');
+    for(var j = (searches.length - 1); j >= 0; j--) {
+      if (enteredCity === searches[j]){
+        searches.splice(j, 1);
+      }
     }
+  } else {
+    searches = [];
   }
 
-  if (searchedCity) {
-    searches.unshift(searchedCity);
+  if (enteredCity !== null && enteredCity !== '') {
+
+    searches.unshift(enteredCity);
   }
+  
   if (searches.length > 10) {
     searches.pop();
   }
+
   localStorage.setItem('searches', JSON.stringify(searches));
+
+  return searches;
 }
 
 printSearches();
