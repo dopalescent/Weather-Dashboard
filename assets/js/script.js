@@ -9,13 +9,23 @@ var searches = [];
 
 
 function callGeo(searchedCity) {
+
   enteredCity = $('#city-search').val();
 
   if (enteredCity) {
     searchedCity = enteredCity;
   }
+  
+  if(!searchedCity) {
+    return;
+  }
 
-  printSearches();
+  var contentContainer = $('#content-container');
+  if(contentContainer.hasClass('d-none')) {
+    contentContainer.removeClass('d-none');
+  }
+
+  printSearches(searchedCity);
 
   var geoUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + searchedCity + '&limit=1&appid=' + apiKey;
 
@@ -98,7 +108,7 @@ function callForecast() {
     })
 }
 
-function printSearches() {
+function printSearches(searchedCity) {
 
   manageStorage();
  
@@ -142,7 +152,6 @@ function manageStorage() {
   }
 
   if (enteredCity !== null && enteredCity !== '') {
-
     searches.unshift(enteredCity);
   }
   
@@ -157,4 +166,7 @@ function manageStorage() {
 
 printSearches();
 
-weatherButton.on('click', callGeo);
+weatherButton.on('click', function(event) {
+  event.preventDefault();
+  callGeo();
+});
